@@ -1,0 +1,39 @@
+[project]
+name = "qt-material-icons"
+version = "0.0.0"
+description = "Material Symbols by Google for Qt using PySide"
+authors = [
+    {name = "Beat Reichenbach"}
+]
+dependencies = []
+requires-python = ">=3.6"
+license = {text = "MIT"}
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "python-semantic-release",
+    "PySide6"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["qt_material_icons*"]
+
+[tool.semantic_release]
+version_variable = "qt_material_icons/__init__.py:__version__"
+version_toml  = ["pyproject.toml:project.version"]
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = true
+
+[tool.semantic_release.remote]
+ignore_token_for_push = true
+type = "github"
+
+[tool.black]
+skip-string-normalization = true
