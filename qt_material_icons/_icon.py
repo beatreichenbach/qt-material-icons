@@ -2,59 +2,44 @@ from __future__ import annotations
 
 import enum
 import importlib
+import os
 
 try:
-    from PySide6 import QtWidges, QtGui
+    from PySide6 import QtCore, QtGui, QtWidgets
 except ImportError:
-    from PySide2 import QtWidgets, QtGui
+    from PySide2 import QtCore, QtGui, QtWidgets
+
+ColorRole = QtGui.QPalette.ColorRole
+ColorGroup = QtGui.QPalette.ColorGroup
+State = QtGui.QIcon.State
+Mode = QtGui.QIcon.Mode
 
 
-class MaterialIcon(QtGui.QIcon):
-    class Style(enum.Enum):
-        OUTLINED = 'outlined'
-        ROUNDED = 'rounded'
-        SHARP = 'sharp'
-
-    OUTLINED = Style.OUTLINED
-    ROUNDED = Style.ROUNDED
-    SHARP = Style.SHARP
-
-    def __init__(
-        self, name: str, style: Style = Style.OUTLINED, fill: bool = False
-    ) -> None:
+class SVGIcon(QtGui.QIcon):
+    def __init__(self, path: str) -> None:
         super().__init__()
-
-        import_resource(style)
-
-        self.name = name
-        file_name = f'{name}_fill1_24px.svg' if fill else f'{name}_24px.svg'
-        self._path = (
-            f':/material-design-icons/symbols/web/{name}/'
-            f'materialsymbols{style.value}/{file_name}'
-        )
-        self._pixmap = QtGui.QPixmap(self._path)
-
+        self._path = path
+        self._pixmap = QtGui.QPixmap(path)
         self._init_colors()
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}({self.name!r})'
+        name = os.path.basename(self._path)
+        return f'{self.__class__.__name__}({name!r})'
 
     def _init_colors(self) -> None:
         palette = QtWidgets.QApplication.palette()
-        role = QtGui.QPalette.ColorRole.WindowText
-        self._color_normal = palette.color(QtGui.QPalette.ColorGroup.Normal, role)
-        self._color_disabled = palette.color(QtGui.QPalette.ColorGroup.Disabled, role)
-        state = QtGui.QIcon.State.Off
-        self.set_color(self._color_normal, QtGui.QIcon.Mode.Normal, state)
-        self.set_color(self._color_disabled, QtGui.QIcon.Mode.Disabled, state)
+        self._color_normal = palette.color(ColorGroup.Normal, ColorRole.WindowText)
+        self._color_disabled = palette.color(ColorGroup.Disabled, ColorRole.WindowText)
+        self.set_color(self._color_normal, Mode.Normal, State.Off)
+        self.set_color(self._color_disabled, Mode.Disabled, State.Off)
 
     def set_icon(
         self,
         icon: QtGui.QIcon,
-        mode: QtGui.QIcon.Mode = QtGui.QIcon.Mode.Normal,
-        state: QtGui.QIcon.State = QtGui.QIcon.State.Off,
+        mode: Mode = Mode.Normal,
+        state: State = State.Off,
     ):
-        if isinstance(icon, MaterialIcon):
+        if isinstance(icon, type(self)):
             pixmap = icon._pixmap
         else:
             pixmap = icon.pixmap(self._pixmap.size())
@@ -62,20 +47,18 @@ class MaterialIcon(QtGui.QIcon):
 
     def pixmap(
         self,
-        extent: int = 0,
-        mode: QtGui.QIcon.Mode = QtGui.QIcon.Mode.Normal,
-        state: QtGui.QIcon.State = QtGui.QIcon.State.Off,
+        size: QtCore.QSize | int = 0,
+        mode: Mode = Mode.Normal,
+        state: State = State.Off,
         color: QtGui.QColor | None = None,
     ) -> QtGui.QPixmap:
-        if extent:
-            # HACK: QPixmap causes crashes in PySide2.
-            # pixmap = QtGui.QPixmap(self._path).scaledToWidth(extent)
-            pixmap = QtGui.QIcon(self._path).pixmap(extent)
+        if size:
+            pixmap = QtGui.QIcon(self._path).pixmap(size)
         else:
             pixmap = self._pixmap
 
         if color is None:
-            if state == QtGui.QIcon.State.Off and mode == QtGui.QIcon.Mode.Disabled:
+            if state == State.Off and mode == Mode.Disabled:
                 color = self._color_disabled
             else:
                 color = self._color_normal
@@ -84,18 +67,10 @@ class MaterialIcon(QtGui.QIcon):
     def set_color(
         self,
         color: QtGui.QColor,
-        mode: QtGui.QIcon.Mode = QtGui.QIcon.Mode.Normal,
-        state: QtGui.QIcon.State = QtGui.QIcon.State.Off,
+        mode: Mode = Mode.Normal,
+        state: State = State.Off,
     ):
-        pixmap = fill_pixmap(self._pixmap, color)
-        self.addPixmap(pixmap, mode, state)
-
-
-def import_resource(style: MaterialIcon.Style) -> None:
-    """
-    Imports the resource for Qt, separated by style to not load unneeded SVGs.
-    """
-    importlib.import_module(f'.icons_{style.value}', package=f'{__package__}.resources')
+        self.addPixmap(self.pixmap(color=color), mode, state)
 
 
 def fill_pixmap(pixmap: QtGui.QPixmap, color: QtGui.QColor) -> QtGui.QPixmap:
@@ -110,4 +85,42 @@ def fill_pixmap(pixmap: QtGui.QPixmap, color: QtGui.QColor) -> QtGui.QPixmap:
     return pixmap
 
 
-__all__ = ['MaterialIcon']
+class MaterialIcon(SVGIcon):
+    class Style(enum.Enum):
+        OUTLINED = 'outlined'
+        ROUNDED = 'rounded'
+        SHARP = 'sharp'
+
+    OUTLINED = Style.OUTLINED
+    ROUNDED = Style.ROUNDED
+    SHARP = Style.SHARP
+
+    def __init__(
+        self,
+        name: str,
+        style: Style = Style.OUTLINED,
+        fill: bool = False,
+        size: int = 20,
+    ) -> None:
+        self.name = name
+        self.import_resource(style, size)
+
+        if fill:
+            filename = f'{name}_fill1_{size}px.svg'
+        else:
+            filename = f'{name}_{size}px.svg'
+        path = (
+            f':/material-design-icons/symbols/web/{name}/'
+            f'materialsymbols{style.value}/{filename}'
+        )
+        super().__init__(path)
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}({self.name!r})'
+
+    @staticmethod
+    def import_resource(style: MaterialIcon.Style, size: int) -> None:
+        """
+        Imports the resource for Qt, separated by style to not load unneeded SVGs.
+        """
+        importlib.import_module(f'{__package__}.resources.icons_{style.value}_{size}')
