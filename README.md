@@ -33,7 +33,7 @@ toggle_icon.set_icon(toggle_icon_on, state=QtGui.QIcon.State.On)
 ```
 
 
-![Screenshot of the icons](/.github/assets/icons.png)
+![Screenshot of the icons](https://raw.githubusercontent.com/beatreichenbach/qt-material-icons/refs/heads/main/.github/assets/icons.png)
 
 Refer to [Google Material Symbols & Icons] for browsing icons.
 
