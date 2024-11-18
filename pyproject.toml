@@ -12,28 +12,27 @@ readme = "README.md"
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "python-semantic-release",
-    "PySide6"
+    "black>=24.0",
+    "python-semantic-release>=9.0",
+    "PySide6",
+    "qt_themes>=0.2",
 ]
+pyside2 = ["PySide2"]
+pyside6 = ["PySide6"]
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["qt_material_icons*"]
+include = ["qt_material_icons"]
 
 [tool.semantic_release]
 version_variable = "qt_material_icons/__init__.py:__version__"
 version_toml  = ["pyproject.toml:project.version"]
 
-[tool.semantic_release.publish]
-upload_to_vcs_release = true
-
 [tool.semantic_release.remote]
 ignore_token_for_push = true
-type = "github"
 
 [tool.black]
 skip-string-normalization = true

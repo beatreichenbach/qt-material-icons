@@ -3,6 +3,8 @@
 A Python library that enables [Material Symbols / Material Icons] by Google
 to be used in Qt using PySide.
 
+![Header](https://raw.githubusercontent.com/beatreichenbach/qt-material-icons/refs/heads/main/.github/assets/header.png)
+
 ## Installation
 
 Install using pip:
@@ -31,9 +33,6 @@ toggle_icon = MaterialIcon('toggle_off')
 toggle_icon_on = MaterialIcon('toggle_on')
 toggle_icon.set_icon(toggle_icon_on, state=QtGui.QIcon.State.On)
 ```
-
-
-![Screenshot of the icons](/.github/assets/icons.png)
 
 Refer to [Google Material Symbols & Icons] for browsing icons.
 
