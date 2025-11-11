@@ -5,9 +5,12 @@ import importlib
 import os
 
 try:
-    from PySide6 import QtCore, QtGui, QtWidgets
+    from qtpy import QtCore, QtGui, QtWidgets
 except ImportError:
-    from PySide2 import QtCore, QtGui, QtWidgets
+    try:
+        from PySide6 import QtCore, QtGui, QtWidgets
+    except ImportError:
+        from PySide2 import QtCore, QtGui, QtWidgets
 
 ColorRole = QtGui.QPalette.ColorRole
 ColorGroup = QtGui.QPalette.ColorGroup

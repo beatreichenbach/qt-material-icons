@@ -86,9 +86,12 @@ def patch_backwards_compatibility(path: str) -> None:
     old = 'from PySide6 import QtCore'
     new = (
         'try:\n'
-        '    from PySide6 import QtCore\n'
+        '    from qtpy import QtCore, QtGui, QtWidgets\n'
         'except ImportError:\n'
-        '    from PySide2 import QtCore'
+        '    try:\n'
+        '        from PySide6 import QtCore, QtGui, QtWidgets\n'
+        '    except ImportError:\n'
+        '        from PySide2 import QtCore, QtGui, QtWidgets\n'
     )
     content = content.replace(old, new)
 
