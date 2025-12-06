@@ -25,8 +25,14 @@ qtpy = ["qtpy>=2.0,<3"]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+include-package-data = false
+
 [tool.setuptools.packages.find]
 include = ["qt_material_icons"]
+
+[tool.setuptools.package-data]
+"qt_material_icons" = ["resources/*.py"]
 
 [tool.semantic_release]
 version_variable = "qt_material_icons/__init__.py:__version__"
