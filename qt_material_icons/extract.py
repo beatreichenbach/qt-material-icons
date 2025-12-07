@@ -50,7 +50,6 @@ def extract_icon(
 def extract_icons(
     names: Sequence[str],
     styles: Sequence[MaterialIcon.Style] = (MaterialIcon.Style.OUTLINED,),
-    fill: bool = False,
     sizes: Sequence[int] = (20,),
     output: str = '.',
 ) -> None:
@@ -64,18 +63,19 @@ def extract_icons(
                 filenames = []
 
                 for name in names:
-                    try:
-                        filename = extract_icon(
-                            name=name,
-                            style=style,
-                            fill=fill,
-                            size=size,
-                            output=temp_dir,
-                        )
-                        filenames.append(filename)
-                    except IOError as e:
-                        logger.error(e)
-                        continue
+                    for fill in (True, False):
+                        try:
+                            filename = extract_icon(
+                                name=name,
+                                style=style,
+                                fill=fill,
+                                size=size,
+                                output=temp_dir,
+                            )
+                            filenames.append(filename)
+                        except IOError as e:
+                            logger.error(e)
+                            continue
 
                 if not filenames:
                     logger.error('No files extracted.')

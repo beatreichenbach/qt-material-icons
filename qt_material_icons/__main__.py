@@ -25,11 +25,6 @@ def main() -> None:
         help='The icon styles (outlined, rounded, sharp).',
     )
     parser.add_argument(
-        '--fill',
-        action='store_true',
-        help='The filled variant of the icons.',
-    )
-    parser.add_argument(
         '--sizes',
         type=int,
         nargs='+',
@@ -56,7 +51,6 @@ def main() -> None:
     extract.extract_icons(
         names=args.names,
         styles=styles,
-        fill=args.fill,
         sizes=args.sizes,
         output=args.output,
     )

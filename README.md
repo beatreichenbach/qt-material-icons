@@ -52,7 +52,7 @@ dev = ["qt-material-icons"]
 
 Use the cli to extract icons:
 ```shell
-qtmaterialicons -o mypackage --styles outlined rounded --fill --names home computer search favorite
+qtmaterialicons -o mypackage --styles outlined rounded --sizes 20 24 --names home computer search favorite
 ```
 
 Then import in your repo:
