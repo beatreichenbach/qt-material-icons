@@ -20,7 +20,7 @@ def main() -> None:
         '--styles',
         type=str,
         nargs='+',
-        default='outlined',
+        default=('outlined',),
         choices=['outlined', 'rounded', 'sharp'],
         help='The icon styles (outlined, rounded, sharp).',
     )
@@ -33,7 +33,7 @@ def main() -> None:
         '--sizes',
         type=int,
         nargs='+',
-        default=20,
+        default=(20,),
         choices=[20, 24, 40, 48],
         help='The icon size (20, 24, 40, 48).',
     )
