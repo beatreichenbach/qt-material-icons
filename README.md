@@ -38,6 +38,28 @@ Refer to [Google Material Symbols & Icons] for browsing icons.
 
 [Google Material Symbols & Icons]: https://fonts.google.com/icons
 
+### Localize qt-material-icons
+
+Since the `qt-material-icons` package is quite large with all the resource files, a cli is provided to extract 
+specific icons so they can be shipped alongside the package.
+
+Install as a dev dependency:
+```toml
+# pyproject.toml
+[project.optional-dependencies]
+dev = ["qt-material-icons"]
+```
+
+Use the cli to extract icons:
+```shell
+qtmaterialicons -o mypackage --styles outlined rounded --fill --names home computer search favorite
+```
+
+Then import in your repo:
+```python
+from mypackage.qt_material_icons import MaterialIcon
+```
+
 ## Contributing
 
 To contribute please refer to the [Contributing Guide](CONTRIBUTING.md).

@@ -107,16 +107,7 @@ class MaterialIcon(SVGIcon):
     ) -> None:
         self.name = name
         self.import_resource(style, size)
-
-        if fill:
-            filename = f'{name}_fill1_{size}px.svg'
-        else:
-            filename = f'{name}_{size}px.svg'
-        path = (
-            f':/material-design-icons/symbols/web/{name}/'
-            f'materialsymbols{style.value}/{filename}'
-        )
-        super().__init__(path)
+        super().__init__(MaterialIcon.resource_path(name, style, fill, size))
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.name!r})'
@@ -126,4 +117,19 @@ class MaterialIcon(SVGIcon):
         """
         Imports the resource for Qt, separated by style to not load unneeded SVGs.
         """
+
         importlib.import_module(f'{__package__}.resources.icons_{style.value}_{size}')
+
+    @staticmethod
+    def resource_path(name: str, style: Style, fill: bool, size: int) -> str:
+        """Return the resource path."""
+
+        if fill:
+            filename = f'{name}_fill1_{size}px.svg'
+        else:
+            filename = f'{name}_{size}px.svg'
+        path = (
+            f':/material-design-icons/symbols/web/{name}/'
+            f'materialsymbols{style.value}/{filename}'
+        )
+        return path

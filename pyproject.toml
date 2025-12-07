@@ -21,6 +21,9 @@ pyside2 = ["PySide2"]
 pyside6 = ["PySide6"]
 qtpy = ["qtpy>=2.0,<3"]
 
+[project.scripts]
+qtmaterialicons = "qt_material_icons.__main__:main"
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"

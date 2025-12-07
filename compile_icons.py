@@ -3,11 +3,15 @@ import os
 import subprocess
 
 from qt_material_icons import MaterialIcon
+from qt_material_icons.create import create_resource_file, qrc_file, write_qrc_file
 
+BUILD_DIR = 'build'
 SIZES = (20, 24, 40, 48)
 
 
 def clone_repo() -> None:
+    """Clone the source repo."""
+
     repo = 'material-design-icons'
 
     if not os.path.exists(repo):
@@ -33,15 +37,20 @@ def clone_repo() -> None:
     # )
 
 
-def collect_files(force: bool = False) -> None:
+def create_qrc_files(force: bool = False) -> None:
+    """Create the resource files for all icon sets."""
+
     for style in MaterialIcon.Style:
         for size in SIZES:
-            qrc_path = get_qrc_path(style, size)
+            qrc_path = os.path.join(BUILD_DIR, qrc_file(style, size))
+
             if not force and os.path.exists(qrc_path):
                 logging.debug(f'Path already exists, skipping: {qrc_path}')
                 continue
+
             if not os.path.exists(os.path.dirname(qrc_path)):
                 os.makedirs(os.path.dirname(qrc_path))
+
             logging.info(f'Collecting files for: {qrc_path}')
 
             files = []
@@ -53,61 +62,26 @@ def collect_files(force: bool = False) -> None:
                 files.append(os.path.join(style_path, f'{icon}_{size}px.svg'))
                 files.append(os.path.join(style_path, f'{icon}_fill1_{size}px.svg'))
 
-            with open(qrc_path, 'w') as f:
-                f.write('<!DOCTYPE RCC>\n<RCC version="1.0">\n')
-                f.write('<qresource>\n')
-                for file in files:
-                    path = file.replace('\\', '/')
-                    f.write(f'<file>{path}</file>\n')
-                f.write('</qresource>\n')
-                f.write('</RCC>\n')
+            write_qrc_file(qrc_path, files)
 
 
-def build_resource() -> None:
+def create_resource_files() -> None:
+    """Create resource files for all styles and sizes."""
+
     for style in MaterialIcon.Style:
         for size in SIZES:
-            qrc_path = get_qrc_path(style, size)
-            logging.info(f'Building resource for: {qrc_path}')
-
+            qrc_path = os.path.join(BUILD_DIR, qrc_file(style, size))
             resource_path = os.path.join(
                 'qt_material_icons', 'resources', f'icons_{style.value}_{size}.py'
             )
-            result = subprocess.run(['pyside6-rcc', qrc_path, '-o', resource_path])
-            result.check_returncode()
-            patch_backwards_compatibility(resource_path)
-
-
-def patch_backwards_compatibility(path: str) -> None:
-    logging.info(f'Patching backwards compatibility for: {path}')
-
-    with open(path, 'r') as f:
-        content = f.read()
-
-    old = 'from PySide6 import QtCore'
-    new = (
-        'try:\n'
-        '    from qtpy import QtCore, QtGui, QtWidgets\n'
-        'except ImportError:\n'
-        '    try:\n'
-        '        from PySide6 import QtCore, QtGui, QtWidgets\n'
-        '    except ImportError:\n'
-        '        from PySide2 import QtCore, QtGui, QtWidgets\n'
-    )
-    content = content.replace(old, new)
-
-    with open(path, 'w') as f:
-        f.write(content)
-
-
-def get_qrc_path(style: MaterialIcon.Style, size: int) -> str:
-    return os.path.join('build', f'material_design_icons_{style.value}_{size}.qrc')
+            create_resource_file(qrc_path=qrc_path, resource_path=resource_path)
 
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, force=True)
     clone_repo()
-    collect_files()
-    build_resource()
+    create_qrc_files()
+    create_resource_files()
 
 
 if __name__ == '__main__':
