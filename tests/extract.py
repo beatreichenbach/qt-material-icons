@@ -1,15 +1,13 @@
 import logging
 
-from qt_material_icons import MaterialIcon, extract
+from qt_material_icons import extract
 
 OUTPUT_DIR = '../mypackage'
 
 
-def test_extract_icons() -> None:
-    extract.extract_icons(
+def extract_icons_multi() -> None:
+    extract.extract_icons_multi(
         names=('home', 'computer'),
-        styles=(MaterialIcon.Style.OUTLINED,),
-        fill=True,
         output=OUTPUT_DIR,
     )
 
@@ -21,4 +19,4 @@ def test_extract_package() -> None:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, force=True)
     test_extract_package()
-    test_extract_icons()
+    extract_icons_multi()

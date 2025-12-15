@@ -48,7 +48,7 @@ def main() -> None:
     styles = tuple(MaterialIcon.Style(s) for s in args.styles)
 
     extract.extract_package(output=args.output)
-    extract.extract_icons(
+    extract.extract_icons_multi(
         names=args.names,
         styles=styles,
         sizes=args.sizes,

@@ -20,7 +20,7 @@ def extract_icon(
     size: int,
     output: str,
 ) -> str:
-    """Extract an icon and return the filename."""
+    """Extract an icon and return the filename relative to the root."""
 
     resource_path = MaterialIcon.resource_path(name, style, fill, size)
 
@@ -48,51 +48,66 @@ def extract_icon(
 
 
 def extract_icons(
+    output: str,
+    names: Sequence[str],
+    style: MaterialIcon.Style = MaterialIcon.Style.OUTLINED,
+    size: int = 20,
+) -> None:
+    """
+    Extract the icons matching the names for the given style and size and create a
+    resource file in the output directory.
+    """
+
+    MaterialIcon.import_resource(style, size)
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        filenames = []
+
+        for name in names:
+            for fill in (True, False):
+                try:
+                    filename = extract_icon(
+                        name=name,
+                        style=style,
+                        fill=fill,
+                        size=size,
+                        output=temp_dir,
+                    )
+                    filenames.append(filename)
+                except IOError as e:
+                    logger.error(e)
+                    continue
+
+        if not filenames:
+            logger.error('No files extracted.')
+            return
+
+        qrc_path = os.path.join(temp_dir, qrc_file(style, size))
+        write_qrc_file(qrc_path, filenames)
+
+        package_name = __package__
+        resource_dir = os.path.join(output, package_name, 'resources')
+        resource_path = os.path.join(resource_dir, f'icons_{style.value}_{size}.py')
+
+        os.makedirs(resource_dir, exist_ok=True)
+
+        create_resource_file(qrc_path=qrc_path, resource_path=resource_path)
+
+
+def extract_icons_multi(
     names: Sequence[str],
     styles: Sequence[MaterialIcon.Style] = (MaterialIcon.Style.OUTLINED,),
     sizes: Sequence[int] = (20,),
     output: str = '.',
 ) -> None:
-    """Extract the icons into a new resource file."""
+    """
+    Extract the icons matching the names for all styles and sizes and create
+    resource files in the output directory.
+    """
 
     for style in styles:
         for size in sizes:
-            MaterialIcon.import_resource(style, size)
-
-            with tempfile.TemporaryDirectory() as temp_dir:
-                filenames = []
-
-                for name in names:
-                    for fill in (True, False):
-                        try:
-                            filename = extract_icon(
-                                name=name,
-                                style=style,
-                                fill=fill,
-                                size=size,
-                                output=temp_dir,
-                            )
-                            filenames.append(filename)
-                        except IOError as e:
-                            logger.error(e)
-                            continue
-
-                if not filenames:
-                    logger.error('No files extracted.')
-                    return
-
-                qrc_path = os.path.join(temp_dir, qrc_file(style, size))
-                write_qrc_file(qrc_path, filenames)
-
-                package_name = __package__
-                resource_dir = os.path.join(output, package_name, 'resources')
-                resource_path = os.path.join(
-                    resource_dir, f'icons_{style.value}_{size}.py'
-                )
-
-                os.makedirs(resource_dir, exist_ok=True)
-
-                create_resource_file(qrc_path=qrc_path, resource_path=resource_path)
+            extract_icons(output=output, names=names, style=style, size=size)
 
 
 def extract_package(output: str) -> None:
