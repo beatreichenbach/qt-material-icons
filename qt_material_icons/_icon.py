@@ -133,3 +133,10 @@ class MaterialIcon(SVGIcon):
             f'materialsymbols{style.value}/{filename}'
         )
         return path
+
+    @staticmethod
+    def resource_exists(name: str, style: Style, fill: bool, size: int) -> bool:
+        """Return whether the resource for the requested icon exists."""
+
+        path = MaterialIcon.resource_path(name, style, fill, size)
+        return QtCore.QFile(path).exists()
