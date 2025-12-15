@@ -5,7 +5,13 @@ import shutil
 import tempfile
 from collections.abc import Sequence
 
-from PySide6 import QtCore
+try:
+    from qtpy import QtCore
+except ImportError:
+    try:
+        from PySide6 import QtCore
+    except ImportError:
+        from PySide2 import QtCore
 
 from qt_material_icons import MaterialIcon
 from qt_material_icons.create import create_resource_file, qrc_file, write_qrc_file
