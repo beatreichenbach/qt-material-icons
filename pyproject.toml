@@ -1,6 +1,6 @@
 [project]
 name = "qt-material-icons"
-version = "0.4.0"
+version = "0.4.1"
 description = "Material Symbols by Google for Qt using PySide"
 authors = [
     {name = "Beat Reichenbach"}
