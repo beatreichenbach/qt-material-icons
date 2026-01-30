@@ -6,8 +6,9 @@ OUTPUT_DIR = '../mypackage'
 
 
 def extract_icons_multi() -> None:
+    names = ('blur_off', 'blur_on', 'deblur', 'tune')
     extract.extract_icons_multi(
-        names=('home', 'computer'),
+        names=names,
         output=OUTPUT_DIR,
     )
 

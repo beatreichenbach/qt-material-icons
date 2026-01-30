@@ -6,11 +6,19 @@ from tests import application
 
 def test_icons() -> None:
     with application():
-        icon = MaterialIcon(name='home', fill=True)
-        button = QtWidgets.QPushButton()
-        button.setIcon(icon)
-        button.setFlat(True)
-        button.show()
+        widget = QtWidgets.QWidget()
+        widget.resize(480, 320)
+        layout = QtWidgets.QHBoxLayout()
+        widget.setLayout(layout)
+
+        names = ('blur_off', 'blur_on', 'deblur', 'tune')
+        for name in names:
+            icon = MaterialIcon(name=name, fill=True)
+            button = QtWidgets.QPushButton()
+            button.setIcon(icon)
+            button.setFlat(True)
+            layout.addWidget(button)
+        widget.show()
 
 
 if __name__ == '__main__':
