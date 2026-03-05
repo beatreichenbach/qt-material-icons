@@ -27,7 +27,8 @@ def create_resource_file(qrc_path: str, resource_path: str) -> None:
     logging.debug(f'Using qrc file: {qrc_path}')
     logging.info(f'Creating resource file: {qrc_path}')
 
-    result = subprocess.run(['pyside6-rcc', qrc_path, '-o', resource_path])
+    # HACK: Disable zstd compression as Windows does not support it. (GH-6)
+    result = subprocess.run(['pyside6-rcc', qrc_path, '-no-zstd', '-o', resource_path])
     try:
         result.check_returncode()
     except subprocess.CalledProcessError:

@@ -29,12 +29,12 @@ def clone_repo() -> None:
         with open(os.path.join(repo, '.git', 'info', 'sparse-checkout'), 'a') as f:
             f.write('symbols/web/')
 
-    # logging.info(f'Pulling repo: {repo}')
-    # subprocess.run(
-    #     'git pull origin master',
-    #     cwd=repo,
-    #     shell=True,
-    # )
+    logging.info(f'Pulling repo: {repo}')
+    subprocess.run(
+        'git pull origin master',
+        cwd=repo,
+        shell=True,
+    )
 
 
 def create_qrc_files(force: bool = False) -> None:
