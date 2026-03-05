@@ -5,16 +5,13 @@ from qt_material_icons import extract
 OUTPUT_DIR = '../mypackage'
 
 
-def extract_icons_multi() -> None:
-    names = ('blur_off', 'blur_on', 'deblur', 'tune')
-    extract.extract_icons_multi(
-        names=names,
-        output=OUTPUT_DIR,
-    )
-
-
 def test_extract_package() -> None:
     extract.extract_package(output=OUTPUT_DIR)
+
+
+def extract_icons_multi() -> None:
+    names = ('blur_off', 'blur_on', 'deblur', 'tune')
+    extract.extract_icons_multi(names=names, output=OUTPUT_DIR)
 
 
 if __name__ == '__main__':
