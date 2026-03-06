@@ -2,6 +2,35 @@
 
 <!-- version list -->
 
+## v0.5.0 (2026-03-06)
+
+### Build System
+
+- Disable zstd compression
+  ([`bf3a4c9`](https://github.com/beatreichenbach/qt-material-icons/commit/bf3a4c923207c9729838bfdbd3a939df9f4965d7))
+
+### Code Style
+
+- Add space
+  ([`502cb27`](https://github.com/beatreichenbach/qt-material-icons/commit/502cb273a288b17f2fc9838bf1d39e3bc69e2773))
+
+- Update changelog template
+  ([`10ce05b`](https://github.com/beatreichenbach/qt-material-icons/commit/10ce05bdf8abd50f180a537554898bf829d5ca6b))
+
+### Features
+
+- Update resources
+  ([`4466e4c`](https://github.com/beatreichenbach/qt-material-icons/commit/4466e4cf652bf1a7512dfa0dbaa54ea713767881))
+
+### Testing
+
+- Sort functions
+  ([`12c7fea`](https://github.com/beatreichenbach/qt-material-icons/commit/12c7fea8eb07e4a80b812b0fe725165bc7fa6899))
+
+- Test multiple extracted icons
+  ([`4e118da`](https://github.com/beatreichenbach/qt-material-icons/commit/4e118daf66a10dc81cd793cbc0b1d00ea2159a79))
+
+
 ## v0.4.1 (2025-12-15)
 
 ### Bug Fixes
