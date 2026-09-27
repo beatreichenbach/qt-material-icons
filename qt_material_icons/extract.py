@@ -67,7 +67,7 @@ def extract_icons(
     with tempfile.TemporaryDirectory() as temp_dir:
         filenames = []
 
-        for name in names:
+        for name in set(names):
             for fill in (True, False):
                 try:
                     filename = extract_icon(
@@ -86,6 +86,8 @@ def extract_icons(
             raise RuntimeError(
                 f'no icons extracted for style {style.value} and size {size}'
             )
+
+        filenames.sort(key=os.path.basename)
 
         qrc_path = os.path.join(temp_dir, qrc_file(style, size))
         write_qrc_file(qrc_path, filenames)
@@ -110,8 +112,8 @@ def extract_icons_multi(
     resource files in the output directory.
     """
 
-    for style in styles:
-        for size in sizes:
+    for style in sorted(set(styles), key=lambda style: style.value):
+        for size in sorted(set(sizes)):
             extract_icons(output=output, names=names, style=style, size=size)
 
 
