@@ -5,8 +5,11 @@ def create_drop_shadow_image(
     path: str,
     output_path: str,
     shadow_radius: int = 32,
-    shadow_offset: QtCore.QPoint = QtCore.QPoint(0, 4),
+    shadow_offset: QtCore.QPoint | None = None,
 ) -> None:
+    if shadow_offset is None:
+        shadow_offset = QtCore.QPoint(0, 4)
+
     QtWidgets.QApplication()
 
     pixmap = QtGui.QPixmap(path)

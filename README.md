@@ -1,7 +1,7 @@
 # qt-material-icons
 
-A Python library that enables [Material Symbols / Material Icons] by Google
-to be used in Qt using PySide.
+A Python library that enables [Material Symbols / Material Icons](https://github.com/google/material-design-icons)
+by Google to be used in Qt using PySide.
 
 ![Header](https://raw.githubusercontent.com/beatreichenbach/qt-material-icons/refs/heads/main/.github/assets/header.png)
 
@@ -11,6 +11,8 @@ Install using pip:
 ```shell
 pip install qt-material-icons
 ```
+
+The available Qt extras are `pyside6`, `pyside2`, and `qtpy`.
 
 ## Usage
 
@@ -43,6 +45,9 @@ Refer to [Google Material Symbols & Icons] for browsing icons.
 Since the `qt-material-icons` package is quite large with all the resource files, a cli is provided to extract 
 specific icons so they can be shipped alongside the package.
 
+> [!WARNING]
+The `qtmaterialicons` cli requires Python 3.9 or later.
+
 Install as a dev dependency:
 ```toml
 # pyproject.toml
@@ -66,10 +71,7 @@ To contribute please refer to the [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
-MIT License. Copyright 2024 - Beat Reichenbach.
-See the [License file](LICENSE) for details.
+MIT License. Copyright 2024 - Beat Reichenbach. See the [License file](LICENSE) for details.
 
-The [Material Symbols / Material Icons] are licensed under
+The [Material Symbols / Material Icons](https://github.com/google/material-design-icons) are licensed under
 [Apache License Version 2.0](https://github.com/google/material-design-icons/blob/master/LICENSE).
-
-[Material Symbols / Material Icons]: https://github.com/google/material-design-icons

@@ -1,41 +1,35 @@
 # Contributing Guide
 
+## Development
 
-### Create a virtual environment
+To get started:
 
-Create a venv:
-```shell
-python -m venv venv
+```sh
+uv venv --python 3.13
+uv pip install -e ".[dev]"
+pre-commit install
 ```
-
-Activate it on Linux and macOS:
-```shell
-source venv/bin/activate
-```
-Or on Windows:
-```shell
-.\venv\Scripts\activate.bat
-```
-
-### Install the Development Dependencies.
-
-Install `qt-material-icons` in editable mode:
-```shell
-python -m pip install -e .[dev]
-```
-
-### Making Changes
 
 To update Material Symbols resources:
+
 ```shell
 python compile_icons.py
 ```
 
+Run the checks:
+
+```shell
+ruff format qt_material_icons examples tests
+ruff check --select I --fix qt_material_icons examples tests
+ruff check qt_material_icons examples tests
+ty check
+pytest
+```
+
 ### Releasing Changes
 
-To version up using [python-semantic-release]:
+To version up using [python-semantic-release](https://github.com/python-semantic-release/python-semantic-release):
+
 ```shell
 semantic-release version
 ```
-
-[python-semantic-release]: https://github.com/python-semantic-release/python-semantic-release
