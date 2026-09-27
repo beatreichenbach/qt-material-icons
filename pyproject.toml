@@ -61,6 +61,7 @@ quote-style = "single"
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "UP", "B", "SIM", "ANN", "RUF"]
+ignore = ["SIM108"]
 
 [tool.ty.environment]
 python-version = "3.9"
