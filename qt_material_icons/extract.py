@@ -11,7 +11,7 @@ except ImportError:
     try:
         from PySide6 import QtCore
     except ImportError:
-        from PySide2 import QtCore
+        from PySide2 import QtCore  # ty: ignore[unresolved-import]
 
 from qt_material_icons import MaterialIcon
 from qt_material_icons.create import create_resource_file, qrc_file, write_qrc_file
@@ -32,15 +32,13 @@ def extract_icon(
 
     qfile = QtCore.QFile(resource_path)
     if not qfile.open(QtCore.QIODevice.OpenModeFlag.ReadOnly):
-        logger.error(f'Could not open source resource file: {resource_path}')
-        raise OSError
+        raise OSError(f'could not open source resource file: {resource_path}')
 
     svg_data = qfile.readAll()
     qfile.close()
 
     if svg_data.isEmpty():
-        logger.error(f'Source resource is empty at {resource_path}')
-        raise OSError
+        raise OSError(f'source resource is empty: {resource_path}')
 
     # Match the same directory structure to preserve qrc paths
     icon_path = resource_path[2:]
@@ -80,18 +78,19 @@ def extract_icons(
                         output=temp_dir,
                     )
                     filenames.append(filename)
-                except IOError as e:
+                except OSError as e:
                     logger.error(e)
                     continue
 
         if not filenames:
-            logger.error('No files extracted.')
-            return
+            raise RuntimeError(
+                f'no icons extracted for style {style.value} and size {size}'
+            )
 
         qrc_path = os.path.join(temp_dir, qrc_file(style, size))
         write_qrc_file(qrc_path, filenames)
 
-        package_name = __package__
+        package_name = str(__package__)
         resource_dir = os.path.join(output, package_name, 'resources')
         resource_path = os.path.join(resource_dir, f'icons_{style.value}_{size}.py')
 
@@ -119,13 +118,12 @@ def extract_icons_multi(
 def extract_package(output: str) -> None:
     """Extract the qt-material-icons package and move it into a directory."""
 
-    package_name = __package__
+    package_name = str(__package__)
     files = ['__init__.py', '_icon.py']
 
     spec = importlib.util.find_spec(package_name)
     if spec is None or spec.origin is None:
-        logger.error(f'Could not find installed package: {package_name}.')
-        raise RuntimeError
+        raise RuntimeError(f'could not find installed package: {package_name}')
 
     target_dir = os.path.join(output, package_name)
     os.makedirs(target_dir, exist_ok=True)

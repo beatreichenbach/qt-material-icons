@@ -7,6 +7,7 @@ from qt_material_icons.create import create_resource_file, qrc_file, write_qrc_f
 
 BUILD_DIR = 'build'
 SIZES = (20, 24, 40, 48)
+REPOSITORY_URL = 'https://github.com/google/material-design-icons'
 
 
 def clone_repo() -> None:
@@ -15,26 +16,20 @@ def clone_repo() -> None:
     repo = 'material-design-icons'
 
     if not os.path.exists(repo):
-        url = 'https://github.com/google/material-design-icons'
-        logging.info(f'Cloning repo: {url}')
+        logging.info(f'Cloning repo: {REPOSITORY_URL}')
 
-        os.makedirs(repo)
-        subprocess.run('git init', cwd=repo, shell=True)
         subprocess.run(
-            f'git remote add -f origin {url}',
-            cwd=repo,
-            shell=True,
+            ['git', 'clone', '--filter=blob:none', '--sparse', REPOSITORY_URL, repo],
+            check=True,
         )
-        subprocess.run('git config core.sparseCheckout true', cwd=repo, shell=True)
-        with open(os.path.join(repo, '.git', 'info', 'sparse-checkout'), 'a') as f:
-            f.write('symbols/web/')
+        subprocess.run(
+            ['git', 'sparse-checkout', 'set', 'symbols/web'],
+            cwd=repo,
+            check=True,
+        )
 
     logging.info(f'Pulling repo: {repo}')
-    subprocess.run(
-        'git pull origin master',
-        cwd=repo,
-        shell=True,
-    )
+    subprocess.run(['git', 'pull', 'origin', 'master'], cwd=repo, check=True)
 
 
 def create_qrc_files(force: bool = False) -> None:

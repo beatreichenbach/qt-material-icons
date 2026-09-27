@@ -24,27 +24,29 @@ def write_qrc_file(path: str, files: Sequence[str]) -> None:
 def create_resource_file(qrc_path: str, resource_path: str) -> None:
     """Create resource file from a qrc file."""
 
-    logging.debug(f'Using qrc file: {qrc_path}')
-    logging.info(f'Creating resource file: {qrc_path}')
+    logger.debug(f'Using qrc file: {qrc_path}')
+    logger.info(f'Creating resource file: {qrc_path}')
 
     # HACK: Disable zstd compression as Windows does not support it. (GH-6)
-    result = subprocess.run(['pyside6-rcc', qrc_path, '-no-zstd', '-o', resource_path])
-    try:
-        result.check_returncode()
-    except subprocess.CalledProcessError:
-        logger.debug(result.stderr)
-        logger.error(result.stderr)
-        return
+    result = subprocess.run(
+        ['pyside6-rcc', qrc_path, '-no-zstd', '-o', resource_path],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode:
+        raise RuntimeError(
+            f'could not create resource file: {resource_path}\n{result.stderr}'
+        )
     patch_imports(resource_path)
 
 
 def patch_imports(path: str) -> None:
     """Patch resource file to work with all Qt imports."""
 
-    logging.info(f'Patching imports for resource file: {path}')
+    logger.info(f'Patching imports for resource file: {path}')
 
-    with open(path, 'r') as f:
-        content = f.read()
+    with open(path) as file:
+        content = file.read()
 
     old = r'from \w+ import QtCore'
     new = (
@@ -58,8 +60,8 @@ def patch_imports(path: str) -> None:
     )
     content = re.sub(old, new, content, count=1)
 
-    with open(path, 'w') as f:
-        f.write(content)
+    with open(path, 'w') as file:
+        file.write(content)
 
 
 def qrc_file(style: MaterialIcon.Style, size: int) -> str:

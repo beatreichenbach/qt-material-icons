@@ -5,14 +5,13 @@ from qt_material_icons import MaterialIcon, extract
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description='Extracts a qt_material_icons resources.'
-    )
+    parser = argparse.ArgumentParser(description='Extract qt-material-icons resources.')
 
     parser.add_argument(
         '--names',
         type=str,
         nargs='+',
+        required=True,
         help='The icon names (e.g., home, account_circle).',
     )
 
