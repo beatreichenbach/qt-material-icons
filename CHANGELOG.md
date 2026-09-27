@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v0.5.1 (2026-09-27)
+
+### Bug Fixes
+
+- Typos, raising errors, exports
+  ([`52d7002`](https://github.com/beatreichenbach/qt-material-icons/commit/52d7002029c404b35d356ac5f037b19865ad8b41))
+
+### Build System
+
+- Allow zero version
+  ([`9ab752a`](https://github.com/beatreichenbach/qt-material-icons/commit/9ab752aa3be7655df55a517a5f77149c9318245e))
+
+- Use uv, ruff, ty
+  ([`dfda48f`](https://github.com/beatreichenbach/qt-material-icons/commit/dfda48f73e86249ae518a4f06210a9f1df847e6a))
+
+
 ## v0.5.0 (2026-03-06)
 
 ### Build System
