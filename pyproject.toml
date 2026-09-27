@@ -41,6 +41,7 @@ include = ["qt_material_icons"]
 "qt_material_icons" = ["resources/*.py"]
 
 [tool.semantic_release]
+allow_zero_version = true
 version_variables = ["qt_material_icons/__init__.py:__version__"]
 version_toml  = ["pyproject.toml:project.version"]
 
