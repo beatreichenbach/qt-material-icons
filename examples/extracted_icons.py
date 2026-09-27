@@ -1,10 +1,10 @@
+from mypackage.qt_material_icons import MaterialIcon
 from PySide6 import QtWidgets
 
-from mypackage.qt_material_icons import MaterialIcon
-from tests import application
+from examples import application
 
 
-def test_icons() -> None:
+def show_icons() -> None:
     with application():
         widget = QtWidgets.QWidget()
         widget.resize(480, 320)
@@ -22,4 +22,4 @@ def test_icons() -> None:
 
 
 if __name__ == '__main__':
-    test_icons()
+    show_icons()

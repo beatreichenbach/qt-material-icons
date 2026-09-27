@@ -1,8 +1,13 @@
-import qt_themes
-from PySide6 import QtWidgets, QtCore
+import logging
+import os.path
 
+import qt_themes
+from PySide6 import QtCore, QtWidgets
+
+from examples import application
 from qt_material_icons import MaterialIcon
-from tests import application
+
+logger = logging.getLogger(__name__)
 
 
 class IconGallery(QtWidgets.QWidget):
@@ -15,12 +20,12 @@ class IconGallery(QtWidgets.QWidget):
         self.setWindowTitle('Material Icons')
         self.resize(840, 320)
 
-        layout = QtWidgets.QVBoxLayout()
-        self.setLayout(layout)
+        self._layout = QtWidgets.QVBoxLayout()
+        self.setLayout(self._layout)
 
         # Controls
         control_layout = QtWidgets.QHBoxLayout()
-        layout.addLayout(control_layout)
+        self._layout.addLayout(control_layout)
 
         self.style_combo_box = QtWidgets.QComboBox()
         for style in MaterialIcon.Style:
@@ -49,8 +54,8 @@ class IconGallery(QtWidgets.QWidget):
         self.icon_layout = QtWidgets.QGridLayout()
         self.icon_widget = QtWidgets.QWidget()
         self.icon_widget.setLayout(self.icon_layout)
-        layout.addWidget(self.icon_widget)
-        layout.setStretch(1, 1)
+        self._layout.addWidget(self.icon_widget)
+        self._layout.setStretch(1, 1)
 
         self._update_icons()
 
@@ -58,7 +63,7 @@ class IconGallery(QtWidgets.QWidget):
         self.icon_widget.deleteLater()
 
         self.icon_widget = QtWidgets.QWidget()
-        self.layout().addWidget(self.icon_widget)
+        self._layout.addWidget(self.icon_widget)
         layout = QtWidgets.QHBoxLayout()
         layout.setContentsMargins(64, 64, 64, 64)
         self.icon_widget.setLayout(layout)
@@ -114,6 +119,8 @@ class IconGallery(QtWidgets.QWidget):
         group_box.setLayout(color_layout)
 
         theme = qt_themes.get_theme()
+        if theme is None:
+            raise RuntimeError('could not get the current theme')
 
         icons = []
         icon = MaterialIcon('info', style=style, size=size, fill=fill)
@@ -154,13 +161,15 @@ class IconGallery(QtWidgets.QWidget):
         path = '../.github/assets/icons.png'
         pixmap = self.icon_widget.grab()
         pixmap.save(path)
+        logger.debug(f'Saved screenshot to: {os.path.abspath(path)}')
 
 
-def test_icons() -> None:
+def show_icons() -> None:
+    logging.basicConfig(level=logging.DEBUG, force=True)
     with application():
         widget = IconGallery()
         widget.show()
 
 
 if __name__ == '__main__':
-    test_icons()
+    show_icons()
