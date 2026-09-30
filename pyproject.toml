@@ -38,7 +38,7 @@ include-package-data = false
 include = ["qt_material_icons"]
 
 [tool.setuptools.package-data]
-"qt_material_icons" = ["resources/*.py"]
+"qt_material_icons" = ["py.typed", "resources/*.py"]
 
 [tool.semantic_release]
 allow_zero_version = true
