@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v0.5.2 (2026-09-30)
+
+### Bug Fixes
+
+- Sort icon extraction
+  ([`f03d6f6`](https://github.com/beatreichenbach/qt-material-icons/commit/f03d6f63f4396f84ffddcd0847893bb021bf1171))
+
+### Build System
+
+- Add py.typed
+  ([`dab6fe0`](https://github.com/beatreichenbach/qt-material-icons/commit/dab6fe0be472c862df596a353be1beec2ae59cbc))
+
+- Harden PyPI trusted publishing workflow
+  ([`b0d25e2`](https://github.com/beatreichenbach/qt-material-icons/commit/b0d25e273b70df01d5bd57821ae409fdec5680e3))
+
+- Ignore sim108
+  ([`970d1aa`](https://github.com/beatreichenbach/qt-material-icons/commit/970d1aa41dfd9c23baec6260b141901db989f406))
+
+### Documentation
+
+- Add badges to readme
+  ([`bc9e8d7`](https://github.com/beatreichenbach/qt-material-icons/commit/bc9e8d711ea6fab9317df8e0b185755dcffaadef))
+
+
 ## v0.5.1 (2026-09-27)
 
 ### Bug Fixes
