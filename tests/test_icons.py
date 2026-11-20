@@ -22,7 +22,7 @@ def test_resource_path_fill() -> None:
     assert path.endswith('home_fill1_24px.svg')
 
 
-def test_resource_exists(qapp: QtWidgets.QApplication) -> None:
+def test_resource_exists(app: QtWidgets.QApplication) -> None:
     MaterialIcon.import_resource(MaterialIcon.Style.OUTLINED, 20)
     assert MaterialIcon.resource_exists('home', MaterialIcon.Style.OUTLINED, False, 20)
     assert MaterialIcon.resource_exists('home', MaterialIcon.Style.OUTLINED, True, 20)
@@ -31,7 +31,7 @@ def test_resource_exists(qapp: QtWidgets.QApplication) -> None:
     )
 
 
-def test_material_icon(qapp: QtWidgets.QApplication) -> None:
+def test_material_icon(app: QtWidgets.QApplication) -> None:
     icon = MaterialIcon('home', style=MaterialIcon.Style.ROUNDED, size=24)
     assert icon.name == 'home'
     assert repr(icon) == "MaterialIcon('home')"
@@ -40,18 +40,18 @@ def test_material_icon(qapp: QtWidgets.QApplication) -> None:
     assert pixmap.size() == QtCore.QSize(24, 24)
 
 
-def test_pixmap_default_size(qapp: QtWidgets.QApplication) -> None:
+def test_pixmap_default_size(app: QtWidgets.QApplication) -> None:
     icon = MaterialIcon('home', size=24)
     assert icon.pixmap().size() == QtCore.QSize(24, 24)
 
 
-def test_pixmap_color(qapp: QtWidgets.QApplication) -> None:
+def test_pixmap_color(app: QtWidgets.QApplication) -> None:
     icon = MaterialIcon('home', size=24)
     pixmap = icon.pixmap(24, color=QtGui.QColor('red'))
     assert not pixmap.isNull()
 
 
-def test_fill_pixmap(qapp: QtWidgets.QApplication) -> None:
+def test_fill_pixmap(app: QtWidgets.QApplication) -> None:
     pixmap = QtGui.QPixmap(4, 4)
     pixmap.fill(QtGui.QColor('white'))
     filled = fill_pixmap(pixmap, QtGui.QColor('red'))
@@ -59,13 +59,13 @@ def test_fill_pixmap(qapp: QtWidgets.QApplication) -> None:
     assert pixmap.toImage().pixelColor(0, 0) == QtGui.QColor('white')
 
 
-def test_set_color(qapp: QtWidgets.QApplication) -> None:
+def test_set_color(app: QtWidgets.QApplication) -> None:
     icon = MaterialIcon('home', size=24)
     icon.set_color(QtGui.QColor('red'))
     icon.set_color(QtGui.QColor('red'), mode=QtGui.QIcon.Mode.Disabled)
 
 
-def test_set_icon(qapp: QtWidgets.QApplication) -> None:
+def test_set_icon(app: QtWidgets.QApplication) -> None:
     icon = MaterialIcon('home', size=24)
     other = MaterialIcon('search', size=24)
     icon.set_icon(other, state=QtGui.QIcon.State.On)

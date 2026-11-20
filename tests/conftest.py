@@ -7,7 +7,7 @@ os.environ.setdefault('QT_QPA_PLATFORM', 'offscreen')
 
 
 @pytest.fixture(scope='session')
-def qapp() -> QtWidgets.QApplication:
+def app() -> QtWidgets.QApplication:
     app = QtWidgets.QApplication.instance()
     if not isinstance(app, QtWidgets.QApplication):
         app = QtWidgets.QApplication([])
